@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Auth";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+</head>
+
+<body>
+<div class="container">
+    <section id="content">
+        @RenderBody()
+    </section>
+</div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<partial name="_ValidationScriptsPartial"/>
+@await RenderSectionAsync("Scripts",false)
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+      
+    </div>
+</body>
+</html>

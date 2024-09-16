@@ -1,0 +1,130 @@
+﻿@model Blog.CoreLayer.Models.Post.EditPostViewModel
+@using Blog.CoreLayer.Services.Categories
+@inject ICategoryService _CategoryService
+@{
+    Layout = "_AdminLayout";
+    ViewData["title"] = "ویرایش مقاله";
+    var categories = _CategoryService.GetParentCategories();
+    var subCategories = _CategoryService.GetChildCategories(Model.CategoryId);
+}
+
+<section class="content-header">
+    <h1>
+        @ViewData["title"]
+    </h1>
+    <ol class="breadcrumb">
+        <li><a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li><a asp-area="Admin" asp-controller="Post" asp-action="Index"><i class="fa fa-dashboard"></i> مقالات</a></li>
+        <li class="active">@ViewData["title"]</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <form class="box box-danger" method="post" asp-area="Admin" asp-controller="Post" asp-action="Edit"
+          enctype="multipart/form-data">
+        <div class="box-body row">
+            <input type="hidden" asp-for="PostId" />
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Slug"></label>
+                    <input asp-for="Slug" class="form-control" />
+                    <span asp-validation-for="Slug" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" asp-for="IsSpecial">
+                        <label class="custom-control-label" asp-for="IsSpecial"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea asp-for="Description" id="ckEditor4" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="CategoryId"></label>
+                    <select class="form-control" asp-for="CategoryId" id="CategoryId">
+                        <option value='null'>انتخاب کنید</option>
+                        @foreach (var i in categories)
+                        {
+                            <option value='@i.Id'>@i.Title</option>
+                        }
+
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="SubCategoryId"></label>
+                    <select class="form-control" asp-for="SubCategoryId" id="SubCategoryId">
+                        @foreach (var i in subCategories)
+                        {
+                            <option value='@i.Id'>@i.Title</option>
+                        }
+                    </select>
+                    <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ImageFile"></label>
+                    <input asp-for="ImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="box-footer">
+                <button type="submit" class="btn-success">ثبت اطلاعات</button>
+            </div>
+
+        </div>
+
+    </form>
+
+</section>
+
+@section scripts
+    {
+    <script>
+        $("#CategoryId").change(function () {
+            var categoryId = $(this).val();
+
+            console.log(categoryId);
+
+            $.ajax({
+                url: "/admin/category/GetChildCategories?parentId=" + categoryId,
+                type: "get"
+            }).done(function (data) {
+                $("#SubCategoryId").html("<option value='null'>انتخاب کنید</option>");
+
+                for (var i in data) {
+                    var category = data[i];
+
+                    $("#SubCategoryId").append(`<option value='${category.id}'>${category.title}</option>`);
+                }
+
+                console.log(data);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,109 @@
+﻿@page "{handler?}"
+@using Blog.CoreLayer.Dtos.Category
+@using Blog.CoreLayer.Services.Categories
+@using Blog.CoreLayer.Utilities
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject ICategoryService _categoryService;
+@model Blog.Web.Pages.SearchResultModel
+@{
+    CategoryDto category = null;
+    var search = "";
+    if (!string.IsNullOrWhiteSpace(Model.Filter.FilterParams.CategorySlug))
+    {
+        category = _categoryService.GetCategoryBy(Model.Filter.FilterParams.CategorySlug);
+        if (category != null)
+        {
+            search = category.Title;
+        }
+    }
+    else
+    {
+        search = Model.Filter.FilterParams.Title ?? "مقالات سایت";
+    }
+    ViewData["Title"] = search;
+}
+
+@section metaLinks
+{
+    @if (category != null)
+    {
+        <meta name="description" content="@category.MetaDescription">
+        <meta name="og:description" content="@category.MetaDescription">
+        <meta name="twitter:description" content="@category.MetaDescription">
+        <meta name="keywords" content="@category.MetaTag">
+    }
+
+}
+
+<div class="main-container container pt-40" id="main-container">
+
+    <!-- Content -->
+    <div class="row">
+
+        <!-- Posts -->
+        <div class="col-lg-8 blog__content mb-72">
+            <h1 class="page-title">نتایج جستجو برای: @search</h1>
+            <div id="ajaxSearch">
+                <partial name="Shared/_SearchView" model="@Model.Filter" />
+            </div>
+
+
+        </div>
+        <!-- end posts -->
+        <!-- Sidebar -->
+        <aside class="col-lg-4 sidebar sidebar--right">
+
+            <!-- Widget Popular Posts -->
+            <aside class="widget widget-popular-posts">
+                @await Component.InvokeAsync("MustVisitedPost")
+            </aside> <!-- end widget popular posts -->
+
+        </aside> <!-- end sidebar -->
+
+    </div> <!-- end content -->
+</div>
+
+@section scripts{
+    <script>
+        function ajaxPagination(pageId) {
+            const params = new URLSearchParams(window.location.search);
+            var categorySlug = '';
+            var q = '';
+            if (params.has('categorySlug')) {
+                categorySlug = params.get("categorySlug");
+            }
+            if (params.has('q')) {
+                q = params.get("q");
+            }
+
+            $.ajax({
+                url: `/searchResult/Pagination?pageId=${pageId}&q=${q}&categorySlug=${categorySlug}`,
+                type: "get",
+                beforeSend: function () {
+                    $(".loading").show();
+                },
+                complete: function () {
+                    $(".loading").hide();
+                }
+            }).done(function (data) {
+                $("#ajaxSearch").html(data);
+            });
+        }
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

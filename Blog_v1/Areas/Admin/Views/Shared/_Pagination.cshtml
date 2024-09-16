@@ -1,0 +1,38 @@
+﻿@model Blog.CoreLayer.Utilities.BasePagination
+<div class="col-sm-7">
+    <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+        <ul class="pagination">
+            @if (Model.CurrentPage >1)
+            {
+                <li class="paginate_button previous" id="example2_previous">
+                    <a onclick="changePage(@(Model.CurrentPage-1))">قبلی</a>
+                </li>
+            }
+            else
+            {
+                <li class="paginate_button previous disabled" id="example2_previous">
+                    <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0">قبلی</a>
+                </li>
+            }
+                        
+            @for (var i = Model.StartPage; i <= Model.EndPage; i++)
+            {
+                <li class="paginate_button @(i == Model.CurrentPage ? "active" : null)">
+                    <a onclick="changePage(@i)">@i</a>
+                </li>
+            }
+            @if (Model.CurrentPage<Model.PageCount)
+            {
+                <li class="paginate_button next" id="example2_next">
+                    <a onclick="changePage(@(Model.CurrentPage+1))">بعدی</a>
+                </li>
+            }
+            else
+            {
+                <li class="paginate_button next disabled" id="example2_next">
+                    <a >بعدی</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+﻿@model Blog.CoreLayer.Utilities.BasePagination
+<nav class="pagination">
+
+    @if (Model.CurrentPage > 1)
+    {
+        <a onclick="ajaxPagination(@(Model.CurrentPage-1))"
+           class="pagination__page pagination__icon pagination__page--previous">
+            <i class="ui-arrow-right"></i>
+        </a>
+    }
+
+    @for (var i = Model.StartPage; i <= Model.EndPage; i++)
+    {
+        if (i == Model.CurrentPage)
+        {
+            <span class="pagination__page pagination__page--current">@i</span>
+        }
+        else
+        {
+            <a onclick="ajaxPagination(@i)" class="pagination__page">@i</a>
+        }
+    }
+    @if (Model.CurrentPage < Model.PageCount)
+    {
+        <a onclick="ajaxPagination(@(Model.CurrentPage+1))"
+           class="pagination__page pagination__icon pagination__page--next"><i class="ui-arrow-left"></i></a>
+
+    }
+</nav>

@@ -1,0 +1,47 @@
+﻿@model Blog.CoreLayer.Models.User.CreateUserViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "افزودن کاربر";
+}
+<section class="content-header">
+    <h1>
+        @ViewData["title"]
+    </h1>
+    <ol class="breadcrumb">
+        <li><a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li><a asp-area="Admin" asp-controller="User" asp-action="Index"><i class="fa fa-users"></i> کاربران</a></li>
+        <li class="active">@ViewData["title"]</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <form class="box box-danger" method="post" asp-area="Admin" asp-controller="User" asp-action="Add"
+          enctype="multipart/form-data">
+        <div class="box-body row">
+
+            <div class="col-md-6">
+                @Html.EditorFor(m => m.FullName)
+            </div>
+
+            <div class="col-md-6">
+                @Html.EditorFor(m => m.UserName)
+            </div>
+            <div class="col-md-6">
+                @Html.EditorFor(m => m.Password)
+            </div>
+
+            <div class="col-md-6">
+                @Html.EditorFor(m => m.Role)
+            </div>
+
+            <div class="box-footer">
+                <button type="submit" class="btn-success">ثبت اطلاعات</button>
+            </div>
+
+        </div>
+
+    </form>
+
+</section>
